@@ -4,7 +4,7 @@ import argparse
 from tensorflow import gfile
 import numpy as np
 from tensorflow.python.client import timeline
-
+import tf_trusted_custom_op as tft
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -18,9 +18,9 @@ parser.add_argument('--batch_size', type=int, default='1', help='Batch size must
 parser.add_argument('--model_name', type=str, default='model', help='Name your model!')
 config = parser.parse_args()
 
-cwd = os.getcwd()
+dirname = os.path.dirname(tft.__file__)
+shared_object = dirname + '/model_enclave_op.so'
 
-shared_object = cwd + '/model_enclave_op.so'
 model_module = tf.load_op_library(shared_object)
 model_load = model_module.model_load_enclave
 model_predict = model_module.model_predict_enclave

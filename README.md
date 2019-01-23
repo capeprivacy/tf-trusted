@@ -1,6 +1,6 @@
-### Tf-Trusted
+### tf-trusted
 
-Tf-Trusted allows you to run most tensorflow models inside of an SGX device. It leverages a Tensorflow custom op to send gRPC messages into the SGX device via Asylo where the model is then run by Tensorflow Lite.
+tf-trusted allows you to run most tensorflow models inside of an SGX device. It leverages a Tensorflow custom op to send gRPC messages into the SGX device via Asylo where the model is then run by Tensorflow Lite.
 
 First clone this repo and follow the instructions [here](tf_trusted_custom_op/README.md) to build the required custom operation.
 
@@ -10,9 +10,9 @@ First clone this repo and follow the instructions [here](tf_trusted_custom_op/RE
 $ docker pull gcr.io/asylo-framework/asylo
 ```
 
-##### Build and Run Tf-Trusted
+##### Build and Run tf-trusted
 
-Here we use docker to build Tf-Trusted and then run it.
+Here we use docker to build tf-trusted and then run it.
 
 ```
 $ docker run -it --rm \
@@ -64,7 +64,7 @@ The aesmd service manages the SGX device.
 service aesmd start
 ```
 
-##### Build and Run Tf-Trusted
+##### Build and Run tf-trusted
 
 Now we can run a similar command as before. We just need to point the docker container to the SGX device, the aesmd socket and tell bazel inside the asylo docker container to use the SGX device.
 
@@ -88,4 +88,13 @@ python model_run.py --model_file <location of protobuf model> \
                     --input_file <location of input file, npy format> \
                     --input_name <input placeholder node name> \
                     --output_name <output node name>
+```
+
+
+##### Install tf-trusted custom op
+
+To be able to run the `model_run.py` script from anywhere on your machine you can install it with pip:
+
+```
+pip install -e .
 ```
