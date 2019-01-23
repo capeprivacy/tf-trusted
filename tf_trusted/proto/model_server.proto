@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package tf_trusted;
+
+message GetModelLoadRequest {
+  required string model_name = 1;
+  required bytes model = 2;
+}
+
+message GetModelLoadResponse {}
+
+message GetModelPredictRequest {
+  required string model_name = 1;
+  repeated float input = 2;
+}
+
+message GetModelPredictResponse {
+  repeated float result = 1;
+}
+
+service Model {
+  rpc GetModelLoad(GetModelLoadRequest) returns (GetModelLoadResponse) {}
+  rpc GetModelPredict(GetModelPredictRequest) returns (GetModelPredictResponse) {}
+}

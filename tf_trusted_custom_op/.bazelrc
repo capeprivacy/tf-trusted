@@ -1,0 +1,2 @@
+build --action_env TF_HEADER_DIR="/Users/justinpatriquin/anaconda3/envs/py35/lib/python3.5/site-packages/tensorflow/include"
+build --action_env TF_SHARED_LIBRARY_DIR="/Users/justinpatriquin/anaconda3/envs/py35/lib/python3.5/site-packages/tensorflow"

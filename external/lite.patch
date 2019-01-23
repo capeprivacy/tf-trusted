@@ -1,0 +1,50 @@
+diff --git a/tensorflow/contrib/lite/BUILD b/tensorflow/contrib/lite/BUILD
+index f3ebe3b..e4fc583 100644
+--- a/tensorflow/contrib/lite/BUILD
++++ b/tensorflow/contrib/lite/BUILD
+@@ -147,7 +147,7 @@ cc_library(
+         ],
+         "//conditions:default": [
+             "nnapi_delegate_disabled.cc",
+-            "mmap_allocation.cc",
++            "mmap_allocation_disabled.cc",
+         ],
+     }),
+     hdrs = [
+diff --git a/tensorflow/contrib/lite/kernels/BUILD b/tensorflow/contrib/lite/kernels/BUILD
+index daaf671..0965481 100644
+--- a/tensorflow/contrib/lite/kernels/BUILD
++++ b/tensorflow/contrib/lite/kernels/BUILD
+@@ -18,7 +18,7 @@ EXTRA_EIGEN_COPTS = select({
+         "/DEIGEN_HAS_C99_MATH",
+         "/DEIGEN_AVOID_STL_ARRAY",
+     ],
+-    "//conditions:default": ["-Wno-error=reorder"],
++    "//conditions:default": ["-Wno-error=reorder -DEIGEN_NO_CPUID"],
+ })
+ 
+ tf_cc_test(
+diff --git a/tensorflow/contrib/lite/kernels/internal/round.h b/tensorflow/contrib/lite/kernels/internal/round.h
+index f299d0b..6606500 100644
+--- a/tensorflow/contrib/lite/kernels/internal/round.h
++++ b/tensorflow/contrib/lite/kernels/internal/round.h
+@@ -30,7 +30,7 @@ inline double TfLiteRound(const double x) { return ::round(x); }
+ #else
+ template <class T>
+ inline T TfLiteRound(const T x) {
+-  return std::round(x);
++  return ::round(x);
+ }
+ #endif
+ 
+diff --git a/tensorflow/contrib/lite/nnapi/BUILD b/tensorflow/contrib/lite/nnapi/BUILD
+index 467a2b7..aea02bd 100644
+--- a/tensorflow/contrib/lite/nnapi/BUILD
++++ b/tensorflow/contrib/lite/nnapi/BUILD
+@@ -9,5 +9,5 @@ cc_library(
+     hdrs = [
+         "NeuralNetworksShim.h",
+     ],
+-    linkopts = ["-ldl"],
++    #linkopts = ["-ldl"],
+ )
