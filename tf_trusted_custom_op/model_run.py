@@ -99,17 +99,13 @@ put = np.load(input_file)
 if benchmark:
     tf.reset_default_graph()
 
-    close = False
     with tf.Session() as sess:
         load_node = model_load(model_name, tflite_bytes)
         load_node.run()
 
         for i in range(0, 100 + 1):
-            if i == 100:
-                close = True
-
             placeholder = tf.placeholder(shape=input_shape, dtype=tf.float32)
-            out = model_predict(model_name, placeholder, output_shape, close)
+            out = model_predict(model_name, placeholder, output_shape)
 
             meta = tf.RunMetadata()
             sess.run(out, feed_dict={placeholder : put}, options=tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE),
@@ -121,6 +117,6 @@ else:
         load_node.run()
 
         placeholder = tf.placeholder(shape=input_shape, dtype=tf.float32)
-        out = model_predict(model_name, placeholder, output_shape, True)
+        out = model_predict(model_name, placeholder, output_shape)
         actual = sess.run(out, feed_dict={placeholder: put})
         print("Prediction: ", actual)

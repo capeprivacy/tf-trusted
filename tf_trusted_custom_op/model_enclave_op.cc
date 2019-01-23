@@ -17,7 +17,6 @@ REGISTER_OP("ModelPredictEnclave")
     .Input("model_name: string")
     .Input("input: float")
     .Input("output_shape: shapeT")
-    .Input("close_conn: bool")
     .Output("output: float")
     .Attr("shapeT: {int32, int64} = DT_INT32");
 
@@ -67,7 +66,6 @@ public:
     const Tensor& model_name_tensor = context->input(0);
     const Tensor& input_tensor = context->input(1);
     const Tensor& shape_tensor = context->input(2);
-    const Tensor& close_tensor = context->input(3);
     TensorShape output_shape;
     OP_REQUIRES_OK(context, MakeShape(shape_tensor, &output_shape));
 
@@ -81,7 +79,6 @@ public:
     Tensor* output;
     OP_REQUIRES_OK(context, context->allocate_output(0, output_shape, &output));
     auto model_name = model_name_tensor.flat<string>().data();
-    auto close = close_tensor.flat<bool>().data();
 
     bool status = res->client.GetModelPredict(*model_name,
                                                input_tensor.flat<float>().data(),
