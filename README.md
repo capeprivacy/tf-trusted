@@ -72,7 +72,7 @@ Now we can run a similar command as before. We just need to point the docker con
 $ docker run -it --rm --device=/dev/isgx \
   -v /var/run/aesmd/aesm.socket:/var/run/aesmd/aesm.socket \
   -v bazel-cache:/root/.cache/bazel \
-  -v /home/gavin/research/enclaves:/opt/my-project \
+  -v `pwd`:/opt/my-project \
   -w /opt/my-project  -p 50051:50051/tcp -p 50051:50051/udp \
   gcr.io/asylo-framework/asylo \
   bazel run --config=sgx --define=SGX_SIM=0 //tf_trusted
