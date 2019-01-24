@@ -17,8 +17,9 @@ REGISTER_OP("ModelPredictEnclave")
     .Input("model_name: string")
     .Input("input: float")
     .Input("output_shape: shapeT")
-    .Output("output: float")
-    .Attr("shapeT: {int32, int64} = DT_INT32");
+    .Output("output: dtype")
+    .Attr("shapeT: {int32, int64} = DT_INT32")
+    .Attr("dtype: {float, double, int32, int64} = DT_FLOAT");
 
 struct ClientResource : public ResourceBase {
   ModelClient client;
@@ -58,6 +59,7 @@ public:
   }
 };
 
+template <typename T>
 class ModelPredictOp : public OpKernel {
 public:
   explicit ModelPredictOp(OpKernelConstruction* context) : OpKernel(context) {}
@@ -80,11 +82,11 @@ public:
     OP_REQUIRES_OK(context, context->allocate_output(0, output_shape, &output));
     auto model_name = model_name_tensor.flat<string>().data();
 
-    bool status = res->client.GetModelPredict(*model_name,
-                                               input_tensor.flat<float>().data(),
-                                               input_tensor.NumElements(),
-                                               output->flat<float>().data(),
-                                               output_shape.num_elements());
+    bool status = res->client.GetModelPredict<T>(*model_name,
+                                                 input_tensor.flat<float>().data(),
+                                                 input_tensor.NumElements(),
+                                                 output->flat<T>().data(),
+                                                 output_shape.num_elements());
     OP_REQUIRES(context, status, errors::Internal("Issue with grpc connection"));
 
     // TODO for some reason if you unref res here the python script crashes when
@@ -99,5 +101,24 @@ REGISTER_KERNEL_BUILDER(
 
 REGISTER_KERNEL_BUILDER(
   Name("ModelPredictEnclave")
-  .Device(DEVICE_CPU),
-  ModelPredictOp);
+  .Device(DEVICE_CPU)
+  .TypeConstraint<int32>("dtype"),
+  ModelPredictOp<int32>);
+
+REGISTER_KERNEL_BUILDER(
+  Name("ModelPredictEnclave")
+  .Device(DEVICE_CPU)
+  .TypeConstraint<int64>("dtype"),
+  ModelPredictOp<int64>);
+
+REGISTER_KERNEL_BUILDER(
+  Name("ModelPredictEnclave")
+  .Device(DEVICE_CPU)
+  .TypeConstraint<float>("dtype"),
+  ModelPredictOp<float>);
+
+REGISTER_KERNEL_BUILDER(
+  Name("ModelPredictEnclave")
+  .Device(DEVICE_CPU)
+  .TypeConstraint<double>("dtype"),
+  ModelPredictOp<double>);

@@ -34,7 +34,9 @@ class ModelRunner {
 
     void forward(const google::protobuf::RepeatedField<float> input);
     int64_t get_output_size();
-    float * get_output();
+
+    template <typename T>
+    T * get_output();
 
     void DebugTensors() {
       auto num_tensors = interpreter->tensors_size();

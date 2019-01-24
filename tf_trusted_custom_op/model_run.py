@@ -34,7 +34,7 @@ batch_size = config.batch_size
 model_name = config.model_name
 
 
-def get_output_shape(model_file, output_name):
+def get_output_shape_and_type(model_file, output_name):
     with gfile.GFile(model_file, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
@@ -48,7 +48,7 @@ def get_output_shape(model_file, output_name):
     # TODO i think this can just be inferred via the custom op
     shape[0] = batch_size
 
-    return shape
+    return shape, output.dtype
 
 
 def get_input_shape(model_file, input_name):
@@ -90,7 +90,7 @@ def save_to_tensorboard(i, sess, run_metadata):
 
 with tf.Session() as sess:
     input_shape = get_input_shape(model_file, input_name)
-    output_shape = get_output_shape(model_file, output_name)
+    output_shape, output_type = get_output_shape_and_type(model_file, output_name)
 
 tflite_bytes = convert_model_to_tflite(model_file, [input_name], [output_name], input_shape)
 
@@ -105,7 +105,7 @@ if benchmark:
 
         for i in range(0, 100 + 1):
             placeholder = tf.placeholder(shape=input_shape, dtype=tf.float32)
-            out = model_predict(model_name, placeholder, output_shape)
+            out = model_predict(model_name, placeholder, output_shape, dtype=output_type)
 
             meta = tf.RunMetadata()
             sess.run(out, feed_dict={placeholder : put}, options=tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE),
@@ -117,6 +117,6 @@ else:
         load_node.run()
 
         placeholder = tf.placeholder(shape=input_shape, dtype=tf.float32)
-        out = model_predict(model_name, placeholder, output_shape)
+        out = model_predict(model_name, placeholder, output_shape, dtype=output_type)
         actual = sess.run(out, feed_dict={placeholder: put})
         print("Prediction: ", actual)
