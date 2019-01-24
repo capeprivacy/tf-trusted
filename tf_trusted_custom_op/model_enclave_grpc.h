@@ -1,3 +1,10 @@
+#include "tensorflow/core/framework/op.h"
+#include "tensorflow/core/kernels/bounds_check.h"
+#include "tensorflow/core/framework/shape_inference.h"
+#include "tensorflow/core/framework/op_kernel.h"
+#include "tensorflow/core/framework/resource_mgr.h"
+#include "tensorflow/core/lib/core/refcount.h"
+
 #include "grpc/grpc.h"
 #include "grpcpp/channel.h"
 #include "grpcpp/client_context.h"
@@ -15,6 +22,8 @@ using tf_trusted::GetModelLoadResponse;
 using tf_trusted::GetModelPredictRequest;
 using tf_trusted::GetModelPredictResponse;
 using tf_trusted::ReturnType;
+using tensorflow::int32;
+using tensorflow::int64;
 
 template <class T>
 constexpr ReturnType typeToReturnType() {
@@ -33,12 +42,12 @@ constexpr ReturnType typeToReturnType<double>() {
 }
 
 template <>
-constexpr ReturnType typeToReturnType<int32_t>() {
+constexpr ReturnType typeToReturnType<int32>() {
     return ReturnType::INT32;
 }
 
 template <>
-constexpr ReturnType typeToReturnType<int64_t>() {
+constexpr ReturnType typeToReturnType<int64>() {
     return ReturnType::INT64;
 }
 
