@@ -19,7 +19,16 @@ class ModelRunner {
   public:
     std::unique_ptr<tflite::Interpreter> interpreter;
 
-    ModelRunner(std::string model_bytes) {
+    ModelRunner(std::string model_name) {
+      model_ = tflite::FlatBufferModel::BuildFromFile(model_name.c_str(), tflite::DefaultErrorReporter());
+      tflite::ops::builtin::BuiltinOpResolver resolver;
+      tflite::InterpreterBuilder(*model_, resolver)(&interpreter);
+
+      // TODO figure out how to resize based on input shape
+      interpreter->AllocateTensors();
+    }
+
+    ModelRunner(std::string model_name, std::string model_bytes) {
       // Need to take ownership of this buffer.
       model_bytes_ = std::move(model_bytes);
 

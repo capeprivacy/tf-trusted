@@ -128,7 +128,8 @@ private:
         ClientContext context;
         grpc::Status status = stub_->GetModelLoad(&context, req, res);
         if (!status.ok()) {
-            std::cout << "GetModelLoad rpc failed." << std::endl;
+            std::cout << "GetModelLoad rpc failed. " << std::endl;
+            std::cout << status.error_message() << std::endl;
             return false;
         }
 

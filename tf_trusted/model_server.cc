@@ -42,9 +42,13 @@ ModelServer::ModelServer()
 grpc::Status ModelServer::GetModelLoad(grpc::ServerContext *context,
                                        const GetModelLoadRequest *req,
                                        GetModelLoadResponse *res) {
-
   if(runner == nullptr) {
-    runner = new ModelRunner(req->model());
+    // if no bytes attempt to read  a file
+    if(req->model().length() == 0) {
+      runner = new ModelRunner(req->model_name());
+    } else {
+      runner = new ModelRunner(req->model_name(), req->model());
+    }
   }
 
   return grpc::Status::OK;

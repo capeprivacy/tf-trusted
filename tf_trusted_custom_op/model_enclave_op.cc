@@ -41,13 +41,16 @@ public:
     OP_REQUIRES_OK(context, s);
 
     auto model_name = model_name_tensor.flat<string>().data();
-    auto model = model_tensor.flat<string>().data();
+    std::string model;
+    if(model_tensor.NumElements() > 0) {
+      model = *model_tensor.flat<string>().data();
+    }
 
     ClientResource * res2 = nullptr;
     Status s2 = resource_mgr->Lookup(resource_mgr->default_container(), res_name, &res2);
     OP_REQUIRES_OK(context, s2);
 
-    bool status = res2->client.GetModelLoad(*model_name, *model);
+    bool status = res2->client.GetModelLoad(*model_name, model);
     OP_REQUIRES(context, status, errors::Internal("Issue with grpc connection"));
     res2->Unref();
   }

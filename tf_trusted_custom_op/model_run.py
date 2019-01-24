@@ -16,6 +16,7 @@ parser.add_argument('--output_name', type=str, default='', help='Name of the out
 parser.add_argument('--benchmark', action='store_true', help='Run 100 timed inferences, results are stored in /tmp/tensorboard')
 parser.add_argument('--batch_size', type=int, default='1', help='Batch size must match first dim of input file')
 parser.add_argument('--model_name', type=str, default='model', help='Name your model!')
+parser.add_argument('--from_file', action='store_true', help='Tell the enclave to read from a file, file must exists on the enclave machine and already converted to tflite format')
 config = parser.parse_args()
 
 dirname = os.path.dirname(tft.__file__)
@@ -32,6 +33,7 @@ output_name = config.output_name
 benchmark = config.benchmark
 batch_size = config.batch_size
 model_name = config.model_name
+from_file = config.from_file
 
 
 def get_output_shape_and_type(model_file, output_name):
@@ -92,7 +94,10 @@ with tf.Session() as sess:
     input_shape = get_input_shape(model_file, input_name)
     output_shape, output_type = get_output_shape_and_type(model_file, output_name)
 
-tflite_bytes = convert_model_to_tflite(model_file, [input_name], [output_name], input_shape)
+
+tflite_bytes = []
+if not from_file:
+    tflite_bytes = convert_model_to_tflite(model_file, [input_name], [output_name], input_shape)
 
 put = np.load(input_file)
 
