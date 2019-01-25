@@ -85,9 +85,11 @@ class ModelServer final : public Model::Service {
                         const GetModelLoadRequest *query,
                         GetModelLoadResponse *response) override;
 
-  grpc::Status GetModelPredict(grpc::ServerContext *context,
-                        const GetModelPredictRequest *query,
-                        GetModelPredictResponse *response) override;
+
+grpc::Status GetModelPredict(grpc::ServerContext *context,
+                             grpc::ServerReader<GetModelPredictRequest> *reader,
+                             GetModelPredictResponse *res) override;
+
 
 };
 

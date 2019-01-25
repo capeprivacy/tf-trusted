@@ -21,7 +21,8 @@ enum ReturnType {
 message GetModelPredictRequest {
   required ReturnType return_type = 1;
   required string model_name = 2;
-  repeated float input = 3;
+  required int64 total_size = 3;
+  repeated float input = 4;
 }
 
 message GetModelPredictResponse {
@@ -34,5 +35,5 @@ message GetModelPredictResponse {
 
 service Model {
   rpc GetModelLoad(GetModelLoadRequest) returns (GetModelLoadResponse) {}
-  rpc GetModelPredict(GetModelPredictRequest) returns (GetModelPredictResponse) {}
+  rpc GetModelPredict(stream GetModelPredictRequest) returns (GetModelPredictResponse) {}
 }

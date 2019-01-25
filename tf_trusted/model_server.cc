@@ -55,13 +55,23 @@ grpc::Status ModelServer::GetModelLoad(grpc::ServerContext *context,
 }
 
 grpc::Status ModelServer::GetModelPredict(grpc::ServerContext *context,
-                                          const GetModelPredictRequest *req,
+                                          grpc::ServerReader<GetModelPredictRequest> *reader,
                                           GetModelPredictResponse *res) {
-  runner->forward(req->input());
+  GetModelPredictRequest req;
+  google::protobuf::RepeatedField<float> input;
+  while (reader->Read(&req)) {
+    if(input.size() == 0) {
+      input.Reserve(req.total_size());
+    }
+
+    input.MergeFrom(req.input());
+  }
+
+  runner->forward(input);
 
   int size = runner->get_output_size();
 
-  switch(req->return_type()) {
+  switch(req.return_type()) {
     case ReturnType::FLOAT:
     {
         float * output = runner->get_output<float>();

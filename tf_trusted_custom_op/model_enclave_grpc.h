@@ -15,6 +15,7 @@
 
 using grpc::Channel;
 using grpc::ClientContext;
+using grpc::ClientWriter;
 
 using tf_trusted::Model;
 using tf_trusted::GetModelLoadRequest;
@@ -61,16 +62,13 @@ GetModelLoadRequest MakeModelLoadRequest(std::string model_name, std::string mod
 }
 
 GetModelPredictRequest MakeModelPredictRequest(std::string model_name,
-                                              const float * inputs,
                                               int size,
                                               ReturnType return_type) {
     GetModelPredictRequest req;
 
-    google::protobuf::RepeatedField<float> data(inputs, inputs + size);
-    req.mutable_input()->Swap(&data);
-
     req.set_model_name(model_name);
     req.set_return_type(return_type);
+    req.set_total_size(size);
 
     return req;
 }
@@ -94,10 +92,10 @@ public:
                   T * output, int output_size) {
         auto return_type = typeToReturnType<T>();
 
-        auto req = MakeModelPredictRequest(model_name, input, input_size, return_type);
+        auto req = MakeModelPredictRequest(model_name, input_size, return_type);
         GetModelPredictResponse res;
 
-        bool status = GetOneModelPredict(req, &res);
+        bool status = StreamModelPredict(req, &res, input);
         if(!status) {
             return status;
         }
@@ -136,15 +134,34 @@ private:
         return true;
     }
 
-    bool GetOneModelPredict(const GetModelPredictRequest& req, GetModelPredictResponse* res) {
+    bool StreamModelPredict(GetModelPredictRequest req, GetModelPredictResponse* res, const float * inputs) {
         ClientContext context;
-        grpc::Status status = stub_->GetModelPredict(&context, req, res);
-        if (!status.ok()) {
-            std::cout << "GetModelPredict rpc failed." << std::endl;
-            return false;
+
+        std::unique_ptr<ClientWriter<GetModelPredictRequest>> writer(stub_->GetModelPredict(&context, res));
+
+        int64 size = 65536 / sizeof(float); // 4 kib, optimal size
+        for (int i = 0; i < req.total_size(); i += size) {
+            if(i + size > req.total_size()) {
+                google::protobuf::RepeatedField<float> data(inputs + i, inputs + req.total_size());
+                req.mutable_input()->Swap(&data);
+            } else {
+                google::protobuf::RepeatedField<float> data(inputs + i, inputs + i + size);
+                req.mutable_input()->Swap(&data);
+            }
+
+            if (!writer->Write(req)) {
+                // Broken stream.
+                break;
+            }
         }
 
-        return true;
+        writer->WritesDone();
+        grpc::Status status = writer->Finish();
+        if (status.ok()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     std::unique_ptr<Model::Stub> stub_;
