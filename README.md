@@ -6,8 +6,10 @@ First clone this repo and follow the instructions [here](tf_trusted_custom_op/RE
 
 ##### Pull Asylo Docker Container
 
+We're pinned to version v0.3.2 of the docker container for now.
+
 ```
-$ docker pull gcr.io/asylo-framework/asylo
+$ docker pull gcr.io/asylo-framework/asylo:buildenv-v0.3.2
 ```
 
 ##### Build and Run tf-trusted
@@ -20,7 +22,7 @@ $ docker run -it --rm \
   -v `pwd`:/opt/my-project \
   -w /opt/my-project \
   -p 50051:50051/tcp -p 50051:50051/udp \
-  gcr.io/asylo-framework/asylo \
+  gcr.io/asylo-framework/asylo:buildenv-v0.3.2 \
   bazel run --config=enc-sim //tf_trusted
 ```
 
