@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
+TF_REQUIRED_VERSION=1.12.0
+
 function write_to_bazelrc() {
   echo "$1" >> .bazelrc
 }
@@ -23,9 +25,15 @@ function write_action_env_to_bazelrc() {
 
 rm .bazelrc
 if python -c "import tensorflow" &> /dev/null; then
+    CURR_VERSION=( $(python -c "import tensorflow; print(tensorflow.__version__)") )
+    if [ "$CURR_VERSION" != "$TF_REQUIRED_VERSION" ]; then
+        echo "TF Trusted currently only supports Tensorflow version $TF_REQUIRED_VERSION you have $CURR_VERSION"
+        echo "Please install Tensorflow version $TF_REQUIRED_VERSION"
+        exit
+    fi
     echo 'using installed tensorflow'
 else
-    pip install tensorflow
+    pip install tensorflow==1.12.0
 fi
 
 TF_CFLAGS=( $(python -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_compile_flags()))') )
