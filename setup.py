@@ -38,6 +38,6 @@ setuptools.setup(
     license="Apache License 2.0",
     scripts=['tf_trusted_custom_op/model_run.py'],
     package_data={
-        '':['*.so'],
+        '': ['*.so'],
     }
 )

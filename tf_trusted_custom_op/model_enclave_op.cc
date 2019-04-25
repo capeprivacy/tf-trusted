@@ -37,7 +37,7 @@ public:
     res->client = ModelClient(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
     auto resource_mgr = context->resource_manager();
 
-    Status s = resource_mgr->Create(resource_mgr->default_container(), res_name, res);
+    Status s = resource_mgr->Create("connections", res_name, res);
     OP_REQUIRES_OK(context, s);
 
     auto model_name = model_name_tensor.flat<string>().data();
@@ -47,11 +47,12 @@ public:
     }
 
     ClientResource * res2 = nullptr;
-    Status s2 = resource_mgr->Lookup(resource_mgr->default_container(), res_name, &res2);
+    Status s2 = resource_mgr->Lookup("connections", res_name, &res2);
     OP_REQUIRES_OK(context, s2);
 
     bool status = res2->client.GetModelLoad(*model_name, model);
     OP_REQUIRES(context, status, errors::Internal("Issue with grpc connection"));
+
     res2->Unref();
   }
 };
@@ -71,7 +72,7 @@ public:
     auto resource_mgr = context->resource_manager();
 
     ClientResource * res = nullptr;
-    Status s = resource_mgr->Lookup(resource_mgr->default_container(), res_name, &res);
+    Status s = resource_mgr->Lookup("connections", res_name, &res);
     OP_REQUIRES_OK(context, s);
 
     // Allocate output

@@ -10,7 +10,7 @@ Bazel is required to build this custom op. It can be downloaded from [here](http
 
 ##### Python and Tensorflow
 
-This example also requires python 3.5, 3.6 be installed along with tensorflow 1.12.0. You can install these using your favourite python version manager. We recommend using conda.
+This example also requires python 3.5, 3.6 be installed along with tensorflow 1.13.1. You can install these using your favourite python version manager. We recommend using conda.
 
 ##### Build Custom Operation
 

@@ -11,16 +11,9 @@ http_archive(
 
 http_archive(
     name = "com_google_protobuf",
-    urls = ["https://github.com/stackb/rules_proto/archive/d86ca6bc56b1589677ec59abfa0bed784d6b7767.tar.gz"],
-    sha256 = "36f11f56f6eb48a81eb6850f4fb6c3b4680e3fc2d3ceb9240430e28d32c47009",
-    strip_prefix = "rules_proto-d86ca6bc56b1589677ec59abfa0bed784d6b7767",
-)
-
-http_archive(
-    name = "com_google_protobuf",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.6.0.tar.gz"],
-    strip_prefix = "protobuf-3.6.0",
-    sha256 = "50a5753995b3142627ac55cfd496cebc418a2e575ca0236e29033c67bd5665f4",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.6.1.2.tar.gz"],
+    strip_prefix = "protobuf-3.6.1.2",
+    sha256 = "2244b0308846bb22b4ff0bcc675e99290ff9f1115553ae9671eba1030af31bc0",
 )
 
 load("@build_stack_rules_proto//cpp:deps.bzl", "cpp_grpc_library")

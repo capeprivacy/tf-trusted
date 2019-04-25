@@ -105,3 +105,6 @@ venv.bak/
 *.tflite
 *.pb
 *.npy
+
+# bazel
+bazel*
