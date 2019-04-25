@@ -29,8 +29,8 @@ cc_library(
     deps = [
         ":model_server_grpc_proto",
         "@com_github_grpc_grpc//:grpc++",
-        "@org_tensorflow//tensorflow/contrib/lite:framework",
-        "@org_tensorflow//tensorflow/contrib/lite/kernels:builtin_ops",
+        "@org_tensorflow//tensorflow/lite:framework",
+        "@org_tensorflow//tensorflow/lite/kernels:builtin_ops",
     ],
     copts = ["-DEIGEN_NO_CPUID"],
 )
@@ -62,9 +62,9 @@ sim_enclave(
 # The driver for the gRPC server enclave.
 enclave_loader(
     name = "tf_trusted",
-    srcs = ["tf_trusted_driver.cc"],
     enclaves = {"enclave": ":tf_trusted_enclave.so"},
     loader_args = ["--enclave_path='{enclave}'"],
+    srcs = ["tf_trusted_driver.cc"],
     deps = [
         ":tf_trusted_config_proto_cc",
         "@com_github_gflags_gflags//:gflags_nothreads",

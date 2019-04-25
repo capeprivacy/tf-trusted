@@ -1,0 +1,129 @@
+diff --git a/closure/repositories.bzl b/closure/repositories.bzl
+index 7427051..c4a4425 100644
+--- a/closure/repositories.bzl
++++ b/closure/repositories.bzl
+@@ -14,6 +14,7 @@
+ 
+ """External dependencies for Closure Rules."""
+ 
++load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+ load("//closure/private:java_import_external.bzl", "java_import_external")
+ load("//closure/private:platform_http_file.bzl", "platform_http_file")
+ load("//closure:filegroup_external.bzl", "filegroup_external")
+@@ -381,7 +382,7 @@ def com_google_common_html_types():
+   )
+ 
+ def com_google_common_html_types_html_proto():
+-  native.http_file(
++  http_file(
+       name = "com_google_common_html_types_html_proto",
+       sha256 = "6ece202f11574e37d0c31d9cf2e9e11a0dbc9218766d50d211059ebd495b49c3",
+       urls = [
+@@ -581,7 +582,7 @@ def com_google_javascript_closure_library():
+   # To update Closure Library, one needs to uncomment and run the
+   # js_library_files_maker and js_testing_files_maker genrules in
+   # closure_library.BUILD.
+-  native.new_http_archive(
++  http_archive(
+       name = "com_google_javascript_closure_library",
+       urls = [
+           "https://mirror.bazel.build/github.com/google/closure-library/archive/v20171203.tar.gz",
+@@ -597,7 +598,7 @@ def com_google_javascript_incremental_dom():
+   # third_party/javascript/incremental_dom/build.sh to remain compatible with
+   # the upstream "js-closure" gulpfile.js target.
+   # https://github.com/google/incremental-dom/blob/master/gulpfile.js
+-  native.http_file(
++  http_file(
+       name = "com_google_javascript_incremental_dom",
+       urls = [
+           "https://mirror.bazel.build/github.com/google/incremental-dom/archive/0.5.2.tar.gz",
+@@ -619,7 +620,7 @@ def com_google_jsinterop_annotations():
+   )
+ 
+ def com_google_protobuf():
+-  native.http_archive(
++  http_archive(
+       name = "com_google_protobuf",
+       strip_prefix = "protobuf-3.5.0",
+       sha256 = "0cc6607e2daa675101e9b7398a436f09167dffb8ca0489b0307ff7260498c13c",
+@@ -630,7 +631,7 @@ def com_google_protobuf():
+   )
+ 
+ def com_google_protobuf_java():
+-  native.http_archive(
++  http_archive(
+       name = "com_google_protobuf_java",
+       sha256 = "0cc6607e2daa675101e9b7398a436f09167dffb8ca0489b0307ff7260498c13c",
+       strip_prefix = "protobuf-3.5.0",
+@@ -641,7 +642,7 @@ def com_google_protobuf_java():
+   )
+ 
+ def com_google_protobuf_js():
+-  native.new_http_archive(
++  http_archive(
+       name = "com_google_protobuf_js",
+       urls = [
+           "https://mirror.bazel.build/github.com/google/protobuf/archive/v3.5.0.tar.gz",
+@@ -695,7 +696,7 @@ def com_google_template_soy():
+   )
+ 
+ def com_google_template_soy_jssrc():
+-  native.new_http_archive(
++  http_archive(
+       name = "com_google_template_soy_jssrc",
+       sha256 = "be98a356a30cb5af9905c62a89192906096356e4958b243ecd2d49d497c24ee3",
+       urls = [
+@@ -731,7 +732,7 @@ def com_squareup_javawriter():
+   )
+ 
+ def fonts_noto_hinted_deb():
+-  native.http_file(
++  http_file(
+       name = "fonts_noto_hinted_deb",
+       urls = [
+           "https://mirror.bazel.build/http.us.debian.org/debian/pool/main/f/fonts-noto/fonts-noto-hinted_20161116-1_all.deb",
+@@ -741,7 +742,7 @@ def fonts_noto_hinted_deb():
+   )
+ 
+ def fonts_noto_mono_deb():
+-  native.http_file(
++  http_file(
+       name = "fonts_noto_mono_deb",
+       urls = [
+           "https://mirror.bazel.build/http.us.debian.org/debian/pool/main/f/fonts-noto/fonts-noto-mono_20161116-1_all.deb",
+@@ -775,7 +776,7 @@ def javax_inject():
+   )
+ 
+ def libexpat_amd64_deb():
+-  native.http_file(
++  http_file(
+       name = "libexpat_amd64_deb",
+       urls = [
+           "https://mirror.bazel.build/http.us.debian.org/debian/pool/main/e/expat/libexpat1_2.1.0-6+deb8u3_amd64.deb",
+@@ -785,7 +786,7 @@ def libexpat_amd64_deb():
+   )
+ 
+ def libfontconfig_amd64_deb():
+-  native.http_file(
++  http_file(
+       name = "libfontconfig_amd64_deb",
+       urls = [
+           "https://mirror.bazel.build/http.us.debian.org/debian/pool/main/f/fontconfig/libfontconfig1_2.11.0-6.3+deb8u1_amd64.deb",
+@@ -795,7 +796,7 @@ def libfontconfig_amd64_deb():
+   )
+ 
+ def libfreetype_amd64_deb():
+-  native.http_file(
++  http_file(
+       name = "libfreetype_amd64_deb",
+       urls = [
+           "https://mirror.bazel.build/http.us.debian.org/debian/pool/main/f/freetype/libfreetype6_2.5.2-3+deb8u1_amd64.deb",
+@@ -805,7 +806,7 @@ def libfreetype_amd64_deb():
+   )
+ 
+ def libpng_amd64_deb():
+-  native.http_file(
++  http_file(
+       name = "libpng_amd64_deb",
+       urls = [
+           "https://mirror.bazel.build/http.us.debian.org/debian/pool/main/libp/libpng/libpng12-0_1.2.50-2+deb8u2_amd64.deb",

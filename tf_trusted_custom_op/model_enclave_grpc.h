@@ -102,16 +102,16 @@ public:
 
         switch(return_type) {
             case ReturnType::FLOAT:
-                std::copy(res.float_result().begin(), res.float_result().end(), output);
+                res.mutable_float_result()->ExtractSubrange(0, res.float_result_size(), (float*)output);
                 break;
             case ReturnType::DOUBLE:
-                std::copy(res.double_result().begin(), res.double_result().end(), output);
+                res.mutable_double_result()->ExtractSubrange(0, res.float_result_size(), (double*)output);
                 break;
             case ReturnType::INT32:
-                std::copy(res.int32_result().begin(), res.int32_result().end(), output);
+                res.mutable_int32_result()->ExtractSubrange(0, res.float_result_size(), (int32*)output);
                 break;
             case ReturnType::INT64:
-                std::copy(res.int64_result().begin(), res.int64_result().end(), output);
+                res.mutable_int64_result()->ExtractSubrange(0, res.float_result_size(), (int64*)output);
                 break;
             default:
                 std::cout << "NO TYPE!" << std::endl;

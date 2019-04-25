@@ -7,11 +7,11 @@
 #include "include/grpcpp/grpcpp.h"
 #include "include/grpcpp/server.h"
 
-#include "tensorflow/contrib/lite/model.h"
-#include "tensorflow/contrib/lite/interpreter.h"
-#include "tensorflow/contrib/lite/op_resolver.h"
-#include "tensorflow/contrib/lite/kernels/register.h"
-#include "tensorflow/contrib/lite/stderr_reporter.h"
+#include "tensorflow/lite/model.h"
+#include "tensorflow/lite/interpreter.h"
+#include "tensorflow/lite/op_resolver.h"
+#include "tensorflow/lite/kernels/register.h"
+#include "tensorflow/lite/stderr_reporter.h"
 
 namespace tf_trusted {
 

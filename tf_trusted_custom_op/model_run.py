@@ -16,7 +16,8 @@ parser.add_argument('--output_name', type=str, default='', help='Name of the out
 parser.add_argument('--benchmark', action='store_true', help='Run 100 timed inferences, results are stored in /tmp/tensorboard')
 parser.add_argument('--batch_size', type=int, default='1', help='Batch size must match first dim of input file')
 parser.add_argument('--model_name', type=str, default='model', help='Name your model!')
-parser.add_argument('--from_file', action='store_true', help='Tell the enclave to read from a file, file must exists on the enclave machine and already converted to tflite format')
+parser.add_argument('--from_file', action='store_true',
+                    help='Tell the enclave to read from a file, file must exists on the enclave machine and already converted to tflite format')
 config = parser.parse_args()
 
 dirname = os.path.dirname(tft.__file__)
@@ -71,7 +72,7 @@ def get_input_shape(model_file, input_name):
 
 
 def convert_model_to_tflite(graph_def_file, input_arrays, output_arrays, input_shape):
-    converter = tf.contrib.lite.TFLiteConverter.from_frozen_graph(
+    converter = tf.lite.TFLiteConverter.from_frozen_graph(
         graph_def_file, input_arrays, output_arrays, input_shapes={input_arrays[0]: input_shape})
     tflite_model = converter.convert()
 
@@ -113,7 +114,7 @@ if benchmark:
             out = model_predict(model_name, placeholder, output_shape, dtype=output_type)
 
             meta = tf.RunMetadata()
-            sess.run(out, feed_dict={placeholder : put}, options=tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE),
+            sess.run(out, feed_dict={placeholder: put}, options=tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE),
                      run_metadata=meta)
             save_to_tensorboard(i, sess, meta)
 else:
