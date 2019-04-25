@@ -23,7 +23,8 @@ $ docker run -it --rm \
   -w /opt/my-project \
   -p 50051:50051/tcp -p 50051:50051/udp \
   gcr.io/asylo-framework/asylo:buildenv-v0.3.4 \
-  bazel run --config=enc-sim //tf_trusted
+  bazel run --config=enc-sim //tf_trusted \
+  --incompatible_disallow_filetype=false --incompatible_disallow_data_transition=false
 ```
 
 ##### Run a Model
@@ -77,7 +78,8 @@ $ docker run -it --rm --device=/dev/isgx \
   -v `pwd`:/opt/my-project \
   -w /opt/my-project  -p 50051:50051/tcp -p 50051:50051/udp \
   gcr.io/asylo-framework/asylo \
-  bazel run --config=sgx --define=SGX_SIM=0 //tf_trusted
+  bazel run --config=sgx --define=SGX_SIM=0 //tf_trusted \
+  --incompatible_disallow_filetype=false --incompatible_disallow_data_transition=false
 ```
 
 ##### Run a Model
