@@ -6,7 +6,7 @@ First clone this repo and follow the instructions [here](tf_trusted_custom_op/RE
 
 ##### Pull Asylo Docker Container
 
-We're pinned to version v0.3.2 of the docker container for now.
+We're pinned to version v0.3.4 of the docker container for now.
 
 ```
 $ docker pull gcr.io/asylo-framework/asylo:buildenv-v0.3.4
