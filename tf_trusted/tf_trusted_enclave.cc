@@ -72,6 +72,7 @@ asylo::Status GrpcServerEnclave::Initialize(
   int selected_port;
   builder.AddListeningPort(enclave_config.GetExtension(server_address),
                            ::grpc::InsecureServerCredentials(), &selected_port);
+  builder.SetMaxReceiveMessageSize(INT_MAX);
 
   // Add the translator service to the server.
   builder.RegisterService(&modelService_);
