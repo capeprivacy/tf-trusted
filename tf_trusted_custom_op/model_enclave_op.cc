@@ -33,8 +33,12 @@ public:
     const Tensor& model_name_tensor = context->input(0);
     const Tensor& model_tensor = context->input(1);
 
+    grpc::ChannelArguments ch_args;
+    ch_args.SetMaxReceiveMessageSize(-1);
+
     auto res = new ClientResource;
-    res->client = ModelClient(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
+    res->client = ModelClient(grpc::CreateCustomChannel("localhost:50051",
+                              grpc::InsecureChannelCredentials(), ch_args));
     auto resource_mgr = context->resource_manager();
 
     Status s = resource_mgr->Create("connections", res_name, res);

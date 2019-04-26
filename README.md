@@ -1,6 +1,6 @@
-### tf-trusted
+### TF Trusted
 
-tf-trusted allows you to run most tensorflow models inside of an SGX device. It leverages a Tensorflow custom op to send gRPC messages into the SGX device via Asylo where the model is then run by Tensorflow Lite.
+TF Trusted allows you to run most Tensorflow models inside of an Intel SGX device. It leverages a Tensorflow custom op to send gRPC messages into the Intel SGX device via Asylo where the model is then run by Tensorflow Lite.
 
 First clone this repo and follow the instructions [here](tf_trusted_custom_op/README.md) to build the required custom operation.
 
@@ -12,9 +12,9 @@ We're pinned to version v0.3.4 of the docker container for now.
 $ docker pull gcr.io/asylo-framework/asylo:buildenv-v0.3.4
 ```
 
-##### Build and Run tf-trusted
+##### Build and Run TF Trusted
 
-Here we use docker to build tf-trusted and then run it.
+Here we use docker to build TF Trusted and then run it.
 
 ```
 $ docker run -it --rm \
@@ -34,7 +34,7 @@ Run the client.
 In another shell run the following with the correct options for the model you're using:
 
 ```
-cd ../tf_trusted_custom_op
+cd tf_trusted_custom_op
 python model_run.py --model_file <location of protobuf model> \
                     --input_file <location of input file, npy format> \
                     --input_name <input placeholder node name> \
@@ -45,7 +45,7 @@ The input and output names are needed by the Tensorflow Lite converter to conver
 
 You should see some array output!
 
-### Running on SGX Device.
+### Running on Intel SGX Device.
 
 If running on a machine with a SGX Device you run the following to install the needed dependencies.
 
@@ -67,7 +67,7 @@ The aesmd service manages the SGX device.
 service aesmd start
 ```
 
-##### Build and Run tf-trusted
+##### Build and Run TF Trusted
 
 Now we can run a similar command as before. We just need to point the docker container to the SGX device, the aesmd socket and tell bazel inside the asylo docker container to use the SGX device.
 
@@ -87,7 +87,7 @@ $ docker run -it --rm --device=/dev/isgx \
 In another shell run the following with the correct options for the model you're using:
 
 ```
-cd ../tf_trusted_custom_op
+cd tf_trusted_custom_op
 python model_run.py --model_file <location of protobuf model> \
                     --input_file <location of input file, npy format> \
                     --input_name <input placeholder node name> \
@@ -95,7 +95,7 @@ python model_run.py --model_file <location of protobuf model> \
 ```
 
 
-##### Install tf-trusted custom op
+##### Install TF Trusted custom op
 
 To be able to run the `model_run.py` script from anywhere on your machine you can install it with pip:
 

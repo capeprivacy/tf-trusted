@@ -108,3 +108,4 @@ venv.bak/
 
 # bazel
 bazel*
+tf_trusted_custom_op/.bazelrc

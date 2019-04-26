@@ -16,6 +16,7 @@ parser.add_argument('--output_name', type=str, default='', help='Name of the out
 parser.add_argument('--benchmark', action='store_true', help='Run 100 timed inferences, results are stored in /tmp/tensorboard')
 parser.add_argument('--batch_size', type=int, default='1', help='Batch size must match first dim of input file')
 parser.add_argument('--model_name', type=str, default='model', help='Name your model!')
+parser.add_argument('--input_shape', nargs='+', help='The input shape')
 parser.add_argument('--from_file', action='store_true',
                     help='Tell the enclave to read from a file, file must exists on the enclave machine and already converted to tflite format')
 config = parser.parse_args()
@@ -63,7 +64,15 @@ def get_input_shape(model_file, input_name):
 
     # prepend import name gets added when calling import_graph_def
     input = tf.get_default_session().graph.get_tensor_by_name('import/' + input_name + ":0")
-    shape = list(input.get_shape())
+
+    if config.input_shape is not None:
+        shape = config.input_shape
+    else:
+        try:
+            shape = list(input.get_shape())
+        except ValueError:
+            print("Error: Can't read shape from input try setting --input_shape instead")
+            exit()
 
     # TODO i think this can just be inferred via the custom op
     shape[0] = batch_size
@@ -90,6 +99,7 @@ def save_to_tensorboard(i, sess, run_metadata):
     chrome_trace = tracer.generate_chrome_trace_format()
     with open('{}/{}.ctr'.format("/tmp/tensorboard", session_tag), 'w') as f:
         f.write(chrome_trace)
+
 
 with tf.Session() as sess:
     input_shape = get_input_shape(model_file, input_name)
