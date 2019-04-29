@@ -1,20 +1,18 @@
-### TF Trusted
+## TF Trusted
 
-TF Trusted allows you to run most Tensorflow models inside of an Intel SGX device. It leverages a Tensorflow custom op to send gRPC messages into the Intel SGX device via Asylo where the model is then run by Tensorflow Lite.
+TF Trusted allows you to run most Tensorflow models inside of an [Intel SGX](https://software.intel.com/en-us/sgx) device. It leverages a Tensorflow custom operation to send gRPC messages into the Intel SGX device via [Asylo](https://asylo.dev/) where the model is then run by Tensorflow Lite.
+
+The goal of this project is to provide an easy to use framework to experiment with running models securely inside secure enclaves. It **shouldn't** be used in production and is provided for research and experimentation only.
+
+Please see the [contributing](CONTRIBUTING.md) document on how you can help improve the project.
+
+## Getting Started
 
 First clone this repo and follow the instructions [here](tf_trusted_custom_op/README.md) to build the required custom operation.
 
-##### Pull Asylo Docker Container
+#### Build and Run TF Trusted
 
-We're pinned to version v0.3.4 of the docker container for now.
-
-```
-$ docker pull gcr.io/asylo-framework/asylo:buildenv-v0.3.4
-```
-
-##### Build and Run TF Trusted
-
-Here we use docker to build TF Trusted and then run it.
+Here we use a docker container to build TF Trusted and then run it.
 
 ```
 $ docker run -it --rm \
@@ -27,9 +25,7 @@ $ docker run -it --rm \
   --incompatible_disallow_filetype=false --incompatible_disallow_data_transition=false
 ```
 
-##### Run a Model
-
-Run the client.
+#### Run a Model
 
 In another shell run the following with the correct options for the model you're using:
 
@@ -43,13 +39,13 @@ python model_run.py --model_file <location of protobuf model> \
 
 The input and output names are needed by the Tensorflow Lite converter to convert the model in the proper format. These can be retrieved the examining the model using a graph visualizer such at [Netron](https://github.com/lutzroeder/netron).
 
-You should see some array output!
+You should now see output!
 
 ### Running on Intel SGX Device.
 
 If running on a machine with a SGX Device you run the following to install the needed dependencies.
 
-##### Install Intel SGX driver, SDK and PSW.
+#### Install Intel SGX driver, SDK and PSW.
 
 Driver can be installed with the following instructions:
 
@@ -59,7 +55,7 @@ SDK/PSW can be installed with the following instructions:
 
 https://github.com/intel/linux-sgx
 
-##### Run aesmd Service
+#### Run aesmd Service
 
 The aesmd service manages the SGX device.
 
@@ -67,7 +63,7 @@ The aesmd service manages the SGX device.
 service aesmd start
 ```
 
-##### Build and Run TF Trusted
+#### Build and Run TF Trusted
 
 Now we can run a similar command as before. We just need to point the docker container to the SGX device, the aesmd socket and tell bazel inside the asylo docker container to use the SGX device.
 
@@ -82,7 +78,7 @@ $ docker run -it --rm --device=/dev/isgx \
   --incompatible_disallow_filetype=false --incompatible_disallow_data_transition=false
 ```
 
-##### Run a Model
+#### Run a Model
 
 In another shell run the following with the correct options for the model you're using:
 
@@ -95,7 +91,7 @@ python model_run.py --model_file <location of protobuf model> \
 ```
 
 
-##### Install TF Trusted custom op
+#### Install TF Trusted custom op
 
 To be able to run the `model_run.py` script from anywhere on your machine you can install it with pip:
 
