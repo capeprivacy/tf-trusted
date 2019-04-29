@@ -1,6 +1,6 @@
 # Contribution Guide
 
-The goal of TF Trusted is to make it easy for researchers and practitioners to experiment with various tricks and techniques running TensorFlow models inside secure enclaves. As such, contributions are more than welcome and we're always looking for use cases, feature ideas, or machine learning optimizations!
+The goal of TF Trusted is to make it easy for researchers and practitioners to experiment with various tricks and techniques with running TensorFlow models inside secure enclaves. As such, contributions are more than welcome and we're always looking for use cases, feature ideas, or machine learning optimizations!
 
 This document helps you get started on:
 
