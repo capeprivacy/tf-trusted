@@ -43,7 +43,7 @@ Importantly, use [keywords](https://help.github.com/en/articles/closing-issues-u
 
 # Reporting a Bug
 
-Think you've found a bug? Let us know by opening an [issue in our tracker](https://github.com/mortendahl/tf-encrypted/issues) and apply the "bug" label!
+Think you've found a bug? Let us know by opening an [issue in our tracker](https://github.com/dropoutlabs/tf-trusted/issues) and apply the "bug" label!
 
 ## Security disclosures
 
