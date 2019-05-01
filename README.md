@@ -2,13 +2,13 @@
 
 TF Trusted allows you to run most Tensorflow models inside of an [Intel SGX](https://software.intel.com/en-us/sgx) device. It leverages a Tensorflow custom operation to send gRPC messages into the Intel SGX device via [Asylo](https://asylo.dev/) where the model is then run by Tensorflow Lite.
 
-The goal of this project is to provide an easy to use framework to experiment with running models securely inside secure enclaves. It **shouldn't** be used in production and is provided for research and experimentation only.
+This project's goal is to make it easy to experiment with running TensorFlow models inside secure enclaves. This library is not production-ready and is provided for research and experimentation only.
 
-Please see the [contributing](CONTRIBUTING.md) document on how you can help improve the project.
+We're always looking for contributors, if you're learning about how you can help improve the project, please check out our [contributing guidelines](CONTRIBUTING.md).
 
 ## Getting Started
 
-First clone this repo and follow the instructions [here](tf_trusted_custom_op/README.md) to build the required custom operation.
+To get started, clone this repository and then follow the instructions for building the TensorFlow custom operation located [here](tf_trusted_custom_op/README.md).
 
 #### Build and Run TF Trusted
 
