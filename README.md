@@ -8,11 +8,37 @@ We're always looking for contributors, if you're learning about how you can help
 
 ## Getting Started
 
-To get started, clone this repository and then follow the instructions for building the TensorFlow custom operation located [here](tf_trusted_custom_op/README.md).
+To get started, clone this repository and then install the following dependencies.
 
-#### Build and Run TF Trusted
+#### Install Bazel
 
-Here we use a docker container to build TF Trusted and then run it.
+Bazel is required to build this custom operation. It can be downloaded from [here](https://docs.bazel.build/versions/master/install.html).
+
+#### Python and Tensorflow
+
+TF Trusted also requires python 3.5, 3.6 be installed along with tensorflow 1.13.1. You can install these using your favourite python version manager. We recommend using conda.
+
+#### Install Docker
+
+On Linux we need to build the custom operation using a docker container provided by TensorFlow.
+
+Run one of the following commands to install docker for Ubuntu. Or use your desired package manager.
+
+```
+$ sudo snap install docker
+
+$ sudo apt install docker.io
+```
+
+#### Build TF Trusted Custom Op
+
+Follow the instructions for building the TensorFlow custom operation located [here](tf_trusted_custom_op/README.md).
+
+### Build and Run TF Trusted
+
+First, we will run TF Trusted in simulation mode. This makes it easy for testing new programs on with Asylo because you don't actually need the enclaves devices on the host machine.
+
+We use a docker container to build TF Trusted and then run it.
 
 ```
 $ docker run -it --rm \
@@ -41,9 +67,13 @@ The input and output names are needed by the Tensorflow Lite converter to conver
 
 You should now see output!
 
-### Running on Intel SGX Device.
+### Running on an Intel SGX Device.
 
-If running on a machine with a SGX Device you run the following to install the needed dependencies.
+Next, we will run TF Trusted on an Intel SGX Device. This runs the program with encryption so that no one can learn about what the device is computing. It also allows a third party to remotely attest to the identity of the enclave.
+
+When building enclave programs it's important to run them on an actual enclave or you might not detect performance issues or other bugs.
+
+When running on a machine with an Intel SGX device there are some extra dependencies that need to be installed.
 
 #### Install Intel SGX driver, SDK and PSW.
 
@@ -55,9 +85,9 @@ SDK/PSW can be installed with the following instructions:
 
 https://github.com/intel/linux-sgx
 
-#### Run aesmd Service
+#### Run AESM Service
 
-The aesmd service manages the SGX device.
+The Architecture Enclave Service Manager (AESM) allows the Intel SGX device to be used by the host operating system. We can start the AESM service with:
 
 ```
 service aesmd start
