@@ -1,20 +1,44 @@
-### TF Trusted
+## TF Trusted
 
-TF Trusted allows you to run most Tensorflow models inside of an Intel SGX device. It leverages a Tensorflow custom op to send gRPC messages into the Intel SGX device via Asylo where the model is then run by Tensorflow Lite.
+TF Trusted allows you to run most Tensorflow models inside of an [Intel SGX](https://software.intel.com/en-us/sgx) device. It leverages a Tensorflow custom operation to send gRPC messages into the Intel SGX device via [Asylo](https://asylo.dev/) where the model is then run by Tensorflow Lite.
 
-First clone this repo and follow the instructions [here](tf_trusted_custom_op/README.md) to build the required custom operation.
+This project's goal is to make it easy to experiment with running TensorFlow models inside secure enclaves. This library is not production-ready and is provided for research and experimentation only.
 
-##### Pull Asylo Docker Container
+We're always looking for contributors, if you're learning about how you can help improve the project, please check out our [contributing guidelines](CONTRIBUTING.md).
 
-We're pinned to version v0.3.4 of the docker container for now.
+## Getting Started
+
+To get started, clone this repository and then install the following dependencies.
+
+#### Install Bazel
+
+Bazel is required to build this custom operation. It can be downloaded from [here](https://docs.bazel.build/versions/master/install.html).
+
+#### Python and Tensorflow
+
+TF Trusted also requires python 3.5, 3.6 be installed along with tensorflow 1.13.1. You can install these using your favourite python version manager. We recommend using conda.
+
+#### Install Docker
+
+On Linux we need to build the custom operation using a docker container provided by TensorFlow.
+
+Run one of the following commands to install docker for Ubuntu. Or use your desired package manager.
 
 ```
-$ docker pull gcr.io/asylo-framework/asylo:buildenv-v0.3.4
+$ sudo snap install docker
+
+$ sudo apt install docker.io
 ```
 
-##### Build and Run TF Trusted
+#### Build TF Trusted Custom Op
 
-Here we use docker to build TF Trusted and then run it.
+Follow the instructions for building the TensorFlow custom operation located [here](tf_trusted_custom_op/README.md).
+
+### Build and Run TF Trusted
+
+First, we will run TF Trusted in simulation mode. This makes it easy for testing new programs on with Asylo because you don't actually need the enclaves devices on the host machine.
+
+We use a docker container to build TF Trusted and then run it.
 
 ```
 $ docker run -it --rm \
@@ -27,9 +51,7 @@ $ docker run -it --rm \
   --incompatible_disallow_filetype=false --incompatible_disallow_data_transition=false
 ```
 
-##### Run a Model
-
-Run the client.
+#### Run a Model
 
 In another shell run the following with the correct options for the model you're using:
 
@@ -43,13 +65,17 @@ python model_run.py --model_file <location of protobuf model> \
 
 The input and output names are needed by the Tensorflow Lite converter to convert the model in the proper format. These can be retrieved the examining the model using a graph visualizer such at [Netron](https://github.com/lutzroeder/netron).
 
-You should see some array output!
+You should now see output!
 
-### Running on Intel SGX Device.
+### Running on an Intel SGX Device.
 
-If running on a machine with a SGX Device you run the following to install the needed dependencies.
+Next, we will run TF Trusted on an Intel SGX Device. This runs the program with encryption so that no one can learn about what the device is computing. It also allows a third party to remotely attest to the identity of the enclave.
 
-##### Install Intel SGX driver, SDK and PSW.
+When building enclave programs it's important to run them on an actual enclave or you might not detect performance issues or other bugs.
+
+When running on a machine with an Intel SGX device there are some extra dependencies that need to be installed.
+
+#### Install Intel SGX driver, SDK and PSW.
 
 Driver can be installed with the following instructions:
 
@@ -59,15 +85,15 @@ SDK/PSW can be installed with the following instructions:
 
 https://github.com/intel/linux-sgx
 
-##### Run aesmd Service
+#### Run AESM Service
 
-The aesmd service manages the SGX device.
+The Architecture Enclave Service Manager (AESM) allows the Intel SGX device to be used by the host operating system. We can start the AESM service with:
 
 ```
 service aesmd start
 ```
 
-##### Build and Run TF Trusted
+#### Build and Run TF Trusted
 
 Now we can run a similar command as before. We just need to point the docker container to the SGX device, the aesmd socket and tell bazel inside the asylo docker container to use the SGX device.
 
@@ -82,7 +108,7 @@ $ docker run -it --rm --device=/dev/isgx \
   --incompatible_disallow_filetype=false --incompatible_disallow_data_transition=false
 ```
 
-##### Run a Model
+#### Run a Model
 
 In another shell run the following with the correct options for the model you're using:
 
@@ -95,7 +121,7 @@ python model_run.py --model_file <location of protobuf model> \
 ```
 
 
-##### Install TF Trusted custom op
+#### Install TF Trusted custom op
 
 To be able to run the `model_run.py` script from anywhere on your machine you can install it with pip:
 
