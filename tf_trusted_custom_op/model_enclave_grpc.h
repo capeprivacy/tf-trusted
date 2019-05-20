@@ -13,6 +13,8 @@
 
 #include "proto/model_server.grpc.pb.h"
 
+#include <cstdint>
+
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::ClientWriter;
@@ -105,13 +107,13 @@ public:
                 res.mutable_float_result()->ExtractSubrange(0, res.float_result_size(), (float*)output);
                 break;
             case ReturnType::DOUBLE:
-                res.mutable_double_result()->ExtractSubrange(0, res.float_result_size(), (double*)output);
+                res.mutable_double_result()->ExtractSubrange(0, res.double_result_size(), (double*)output);
                 break;
             case ReturnType::INT32:
-                res.mutable_int32_result()->ExtractSubrange(0, res.float_result_size(), (int32*)output);
+                res.mutable_int32_result()->ExtractSubrange(0, res.int32_result_size(), (int32_t*)output);
                 break;
             case ReturnType::INT64:
-                res.mutable_int64_result()->ExtractSubrange(0, res.float_result_size(), (int64*)output);
+                res.mutable_int64_result()->ExtractSubrange(0, res.int64_result_size(), (int64_t*)output);
                 break;
             default:
                 std::cout << "NO TYPE!" << std::endl;
