@@ -6,8 +6,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
     name = "com_google_asylo",
     urls = ["https://github.com/google/asylo/archive/v0.3.4.2.tar.gz"],
-    strip_prefix = "asylo-0.3.4",
-    sha256 = "e408c614ad129dd7dff0dc7a816f77aae81f22eb851f63fc0bba7de61a467b62",
+    strip_prefix = "asylo-0.3.4.2",
+    sha256 = "82226be212b9f3e2fb14fdf9223e4f376df89424874ac45faff215fa1027797e",
 )
 
 # this must be the same version that tensorflow uses
