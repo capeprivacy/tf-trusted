@@ -10,6 +10,9 @@ http_archive(
     sha256 = "82226be212b9f3e2fb14fdf9223e4f376df89424874ac45faff215fa1027797e",
 )
 
+load("@com_google_asylo//asylo/bazel:asylo_deps.bzl", "asylo_go_deps")
+asylo_go_deps()
+
 # this must be the same version that tensorflow uses
 http_archive(
     name = "io_bazel_rules_closure",
