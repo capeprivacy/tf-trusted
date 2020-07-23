@@ -28,5 +28,5 @@ cc_binary(
         "@com_github_grpc_grpc//:grpc++_reflection",
         ":cpp_model_proto"
     ],
-    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0", "-DNDEBUG"]
 )
